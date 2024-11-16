@@ -22,6 +22,6 @@ else
   fi
 fi
 
-echo "Info: starting Inky!"
+echo "Info: Starting Inky!"
 
-sudo python $currentDir/src/inky.py
+sudo python $currentDir/src/inky_runner.py

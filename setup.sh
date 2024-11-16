@@ -1,5 +1,19 @@
 #!/bin/bash
 
+enable_interfaces(){
+  #enable spi
+  sudo sed -i 's/^dtparam=spi=.*/dtparam=spi=on/' /boot/config.txt
+  sudo sed -i 's/^#dtparam=spi=.*/dtparam=spi=on/' /boot/config.txt
+  sudo raspi-config nonint do_spi 0
+  echo "SPI Interface has been enabled."
+  #enable i2c
+  sudo sed -i 's/^dtparam=i2c_arm=.*/dtparam=i2c_arm=on/' /boot/config.txt
+  sudo sed -i 's/^#dtparam=i2c_arm=.*/dtparam=i2c_arm=on/' /boot/config.txt
+  sudo raspi-config nonint do_i2c 0
+  echo "I2C Interface has been enabled."
+  sed -i '/^dtparam=spi=on/a dtoverlay=spi0-0cs' /boot/firmware/config.txt
+}
+
 show_loader() {
   local pid=$!
   local delay=0.1
@@ -32,6 +46,8 @@ escaped_command=$(echo "$startup_command" | sed 's/[\/&]/\\&/g')
 start_marker="# BEGIN INKY"
 end_marker="# END INKY"
 
+enable_interfaces
+
 echo "Info: Updating rc.local"
 # Check if the markers already exist in /etc/rc.local
 if grep -q "$start_marker" /etc/rc.local; then
@@ -44,23 +60,23 @@ else
   echo "Info: Added startup command with markers to /etc/rc.local."
 fi
 
-# Install required pip packages
-echo  "Info: Installing required packages with pip"
-sudo pip install --break-system-packages -r $currentWorkingDir/config/requirements.txt #> /dev/null &
-# show_loader "   Installing packages...   "
-echo  "Info: Packages Installed!"
+# # Install required pip packages
+# echo  "Info: Installing required packages with pip"
+# sudo pip install --break-system-packages -r $currentWorkingDir/config/requirements.txt #> /dev/null &
+# # show_loader "   Installing packages...   "
+# echo  "Info: Packages Installed!"
 
-# Install inky packages
-echo  "Info: Installing the Pimoroni Inky libraries."
-sudo pip3 install --break-system-packages inky[rpi,example-depends] #> /dev/null &
-sudo pip3 install --break-system-packages inky #> /dev/null &
-# show_loader "   Installing packages...    "
-echo  "Info: Inky package installed!"
+# # Install inky packages
+# echo  "Info: Installing the Pimoroni Inky libraries."
+# sudo pip3 install --break-system-packages inky[rpi,example-depends] #> /dev/null &
+# sudo pip3 install --break-system-packages inky #> /dev/null &
+# # show_loader "   Installing packages...    "
+# echo  "Info: Inky package installed!"
 
-#set up Bonjour
-echo  "Info: Setting up Bonjour"
-sudo apt-get install -y avahi-daemon > /dev/null &
-show_loader "   [1/2] Installing avahi-daemon."
-sudo apt-get install -y netatalk > /dev/null &
-show_loader "   [2/2] Installing netatalk.    "
-echo  "Info: Bonjour set up!"
+# #set up Bonjour
+# echo  "Info: Setting up Bonjour"
+# sudo apt-get install -y avahi-daemon > /dev/null &
+# show_loader "   [1/2] Installing avahi-daemon."
+# sudo apt-get install -y netatalk > /dev/null &
+# show_loader "   [2/2] Installing netatalk.    "
+# echo  "Info: Bonjour set up!"
