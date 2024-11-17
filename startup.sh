@@ -24,4 +24,4 @@ fi
 
 echo "Info: Starting Inky!"
 
-sudo python $currentDir/src/inky_runner.py
+sudo python -u $currentDir/src/inky_runner.py
