@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metin's Inky</title>
+    <title>AKZ Dev's Inky</title>
     <style>
         /* Import Poppins font for a unique, clean look */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -32,7 +32,7 @@
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            width: 320px;
+            width: 600px;
         }
 
         h1 {
@@ -42,8 +42,8 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Input field and button styling */
-        input[type="text"] {
+        /* Common input and button styling */
+        input[type="text"], .file-upload-label {
             width: 100%;
             padding: 0.75rem;
             margin: 1rem 0;
@@ -51,17 +51,18 @@
             border-radius: 6px;
             font-size: 1rem;
             color: #333;
-            background-color: #f9fafb;
+            background-color: #f9fafb; /* Same background color as the text input */
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus, .file-upload-label:focus {
             outline: none;
             border-color: #4a90e2;
             box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
         }
 
+        /* Button styling */
         button {
-            background-color: #4a90e2;
+            background-color: #1abc9c;
             color: #ffffff;
             padding: 0.75rem 1rem;
             border: none;
@@ -75,16 +76,136 @@
         button:hover {
             background-color: #3b78c3;
         }
+
+        /* Hide the default file input */
+        .file-upload-input {
+            display: none;
+        }
+
+        /* Style the custom file upload button */
+        .file-upload-label {
+            display: inline-block;
+            background-color: #f9fafb; /* Matching background color */
+            color: #333; /* Text color matching the input */
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-align: center;
+            border: 1px solid #ddd; /* Matching border style */
+        }
+
+        .file-upload-label:hover {
+            background-color: #e5e7eb; /* Slightly darker hover state */
+        }
+
+        .file-upload-label:active {
+            background-color: #d1d5db; /* Active state */
+        }
+
+        /* File name display styling */
+        .file-name {
+            font-size: 1rem;
+            color: #333;
+            word-wrap: break-word;
+            margin-bottom: 1rem; /* Ensures there's space between the filename and upload button */
+        }
+
+        /* Collapsible section headers */
+        .collapsible-header {
+            background-color: #34495e;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            text-align: left;
+            transition: background-color 0.3s;
+            margin-bottom: 0.2rem; /* No bottom margin by default */
+        }
+
+        .collapsible-header:hover {
+            background-color: #2c3e50;
+        }
+
+        /* Collapsible content */
+        .collapsible-content {
+            padding: 1rem;
+            display: none; /* Initially hidden */
+            border: 1px solid #34495e; /* Default border for collapsed */
+            border-radius: 6px;
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Metin's Inky</h1>
-        <form method="POST">
-            <label for="inputText" style="display: none;">Enter Text:</label>
-            <input type="text" id="inputText" name="inputText" placeholder="Type something..." required>
-            <button type="submit">Submit</button>
-        </form>
+        <h1>AKZ Dev's Inky</h1>
+        <!-- Display the current image -->
+        <div>
+            <img src="{{ url_for('static', filename=current_image) }}" alt="Current Image" style="width: 300px; height: auto;">
+        </div>
+        <!-- Collapsible Section for Text Input -->
+        <div>
+            <div class="collapsible-header" onclick="toggleSection('textInputSection', this)">AI Image Prompt</div>
+            <div id="textInputSection" class="collapsible-content">
+                <form method="POST">
+                    <label for="inputText" style="display: none;">Enter Text:</label>
+                    <input type="text" id="inputText" name="inputText" placeholder="Type something..." required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+        <!-- Collapsible Section for Image Upload -->
+        <div>
+            <div class="collapsible-header" onclick="toggleSection('imageUploadSection', this)">Image Upload</div>
+            <div id="imageUploadSection" class="collapsible-content">
+                <form method="POST" enctype="multipart/form-data">
+                    <!-- Display file name above the upload button -->
+                    <div id="fileName" class="file-name" style="display: none;"></div>
+                    <label for="imageUpload" class="file-upload-label">Choose Image</label>
+                    <input type="file" id="imageUpload" name="imageFile" accept="image/*" required class="file-upload-input" onchange="showFileName()">
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
+        </div>
+
     </div>
+    <script>
+        // Function to toggle visibility of the collapsible section and add/remove margin
+        function toggleSection(sectionId, header) {
+            const section = document.getElementById(sectionId);
+            const computedStyle = window.getComputedStyle(section);  // Get the computed style
+            const isCollapsed = computedStyle.display === "none";  // Check if the section is currently collapsed
+
+            // Toggle the display style of the section
+            section.style.display = isCollapsed ? "block" : "none";
+            
+            // Apply bottom margin of 0.2rem only if the section is collapsed
+            if (isCollapsed) {
+                header.style.marginBottom = "0";  // Adjusted margin
+                section.style.border = "1px solid #34495e";  // Add border when expanded
+                section.style.marginBottom = "1rem"
+            } else {
+                header.style.marginBottom = "0.2rem";  // Remove margin when expanded
+                section.style.border = "none";  // Remove border when collapsed
+                section.style.marginBottom = "0"
+            }
+        }
+
+        function showFileName() {
+            const fileInput = document.getElementById('imageUpload');
+            const fileNameDisplay = document.getElementById('fileName');
+            const file = fileInput.files[0];
+
+            if (file) {
+                fileNameDisplay.textContent = `Selected file: ${file.name}`;
+                fileNameDisplay.style.display = 'block';  // Show the file name
+            } else {
+                fileNameDisplay.style.display = 'none';  // Hide if no file is selected
+            }
+        }
+    </script>
 </body>
 </html>

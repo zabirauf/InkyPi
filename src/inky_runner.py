@@ -19,14 +19,14 @@ print(f"Resolution {inky_display.resolution}")
 
 inky_ai = InkyAI()
 
-latest_request_time = datetime.now()
+latest_request_time = datetime.now() - timedelta(minutes=1)
 
 def resize_image(image, desired_size):
     desired_width, desired_height = desired_size
     desired_ratio = desired_width / desired_height
     img_width, img_height = image.size
     img_ratio = img_width / img_height
-    x_offset, x_offset = 0,0
+    x_offset, y_offset = 0,0
     # Step 1: Determine crop dimensions
     if img_ratio > desired_ratio:
         # Image is wider than desired aspect ratio
@@ -64,17 +64,29 @@ def root_request():
         time_difference = current_time - latest_request_time
         if time_difference >= timedelta(minutes=1):
             latest_request_time = current_time
-            try:
-                prompt = request.form.getlist("inputText")[0]
-                filename = "current_image.png"
-                inky_ai.generate_image(prompt,filename)
+            filename = os.path.join("src","static","current_image.png")
+            if "inputText" in request.form:
+                # if text provided
+                try:
+                    prompt = request.form.getlist("inputText")[0]
+                    inky_ai.generate_image(prompt,filename)
+                    display_image(filename)
+                except Exception as e:
+                    print("Failed to process prompt: " + e)
+            elif "imageFile" in request.files:
+                # if image provided
+                image_file = request.files["imageFile"]
+                image_file.save(filename)
                 display_image(filename)
-            except Exception as e:
-                print("Failed to process prompt: " + e)
+            elif "action" in request.form and request.form.get("action") == "generate_random_image":
+                try:
+                    prompt = inky_ai.get_image_prompt()
+                except Exception as e:
+                    print("Failed to process prompt: " + e)
         else:
             print("Image has been updated within 1 minute, skipping.")
 
-    return render_template('main.html')
+    return render_template('main.html', current_image='current_image.png')
 if __name__ == '__main__':
     app.secret_key = str(random.randint(100000,999999))
     app.run(host="0.0.0.0",port=80)

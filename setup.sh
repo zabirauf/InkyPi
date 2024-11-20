@@ -60,6 +60,22 @@ else
   echo "Info: Added startup command with markers to /etc/rc.local."
 fi
 
+echo "Info: setting hostname"
+sudo bash -c 'echo "akz-inky" > "/etc/hostname"'
+sudo sed -i 's/127.0.0.1\s*localhost/127.0.0.1 akz-inky/' /etc/hosts
+echo "Info: Hostname set to akz-inky"
+
+#set up Bonjour
+echo  "Info: Setting up Bonjour"
+sudo apt-get install -y avahi-daemon > /dev/null &
+show_loader "   [1/2] Installing avahi-daemon."
+sudo apt-get install -y netatalk > /dev/null &
+show_loader "   [2/2] Installing netatalk.    "
+echo  "Info: Bonjour set up!"
+
+sudo systemctl enable avahi-daemon
+sudo systemctl start avahi-daemon
+
 # # Install required pip packages
 # echo  "Info: Installing required packages with pip"
 # sudo pip install --break-system-packages -r $currentWorkingDir/config/requirements.txt #> /dev/null &
@@ -72,11 +88,3 @@ fi
 # sudo pip3 install --break-system-packages inky #> /dev/null &
 # # show_loader "   Installing packages...    "
 # echo  "Info: Inky package installed!"
-
-# #set up Bonjour
-# echo  "Info: Setting up Bonjour"
-# sudo apt-get install -y avahi-daemon > /dev/null &
-# show_loader "   [1/2] Installing avahi-daemon."
-# sudo apt-get install -y netatalk > /dev/null &
-# show_loader "   [2/2] Installing netatalk.    "
-# echo  "Info: Bonjour set up!"
