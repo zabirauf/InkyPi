@@ -5,6 +5,8 @@ from flask import Flask, flash, request, redirect, url_for,render_template
 from inky.auto import auto
 from PIL import ImageDraw,Image
 from inky_ai import InkyAI
+import shutil
+import uuid
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -20,6 +22,8 @@ print(f"Resolution {inky_display.resolution}")
 inky_ai = InkyAI()
 
 latest_request_time = datetime.now() - timedelta(minutes=1)
+current_image_prompt = ""
+current_image_file = os.path.join("src","static","current_image.png")
 
 def resize_image(image, desired_size):
     desired_width, desired_height = desired_size
@@ -54,35 +58,51 @@ def display_image(filename):
         inky_display.set_image(img)
         inky_display.show()
 
+def generate_image(self, prompt, image_dir, test=True):
+    urllib.request.urlretrieve(image_url, image_dir)
+
 @app.route('/', methods=['GET', 'POST'])
 def root_request():
-    global latest_request_time
+    global latest_request_time, current_image_prompt, current_image_file
     print('Received new request!')
     if request.method == 'POST':
         print('Got POST request!')
         current_time = datetime.now()
         time_difference = current_time - latest_request_time
         if time_difference >= timedelta(minutes=1):
-            latest_request_time = current_time
-            filename = os.path.join("src","static","current_image.png")
+            image_updated = False
             if "inputText" in request.form:
                 # if text provided
                 try:
                     prompt = request.form.getlist("inputText")[0]
-                    inky_ai.generate_image(prompt,filename)
-                    display_image(filename)
+                    inky_ai.generate_image(prompt,current_image_file, test=False)
+                    display_image(current_image_file)
+                    image_updated = True
                 except Exception as e:
                     print("Failed to process prompt: " + e)
             elif "imageFile" in request.files:
                 # if image provided
                 image_file = request.files["imageFile"]
-                image_file.save(filename)
-                display_image(filename)
+                image_file.save(current_image_file)
+                display_image(current_image_file)
+                image_updated = True
             elif "action" in request.form and request.form.get("action") == "generate_random_image":
                 try:
                     prompt = inky_ai.get_image_prompt()
+                    inky_ai.generate_image(prompt,current_image_file, test=False)
+                    display_image(current_image_file)
+                    image_updated = True
                 except Exception as e:
                     print("Failed to process prompt: " + e)
+            elif "action" in request.form and request.form.get("action") == "save_image":
+                image_id = str(uuid.uuid4())
+                image_path = os.path.join("src","static", "saved_images", f"{image_id}.png")
+                print(f"LIKE BUTTON RECIEVED: SAVING TO {image_path}")
+                shutil.copy(current_image_file, image_path)
+            else:
+                print("Recieved unhandled request: "+ request.form)
+            if image_updated:
+                latest_request_time = current_time
         else:
             print("Image has been updated within 1 minute, skipping.")
 

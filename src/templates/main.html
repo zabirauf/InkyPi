@@ -60,8 +60,7 @@
             box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
         }
 
-        /* Button styling */
-        button {
+        .submit-button {
             background-color: #1abc9c;
             color: #ffffff;
             padding: 0.75rem 1rem;
@@ -73,7 +72,7 @@
             width: 100%;
         }
 
-        button:hover {
+        .submit-button:hover {
             background-color: #3b78c3;
         }
 
@@ -137,14 +136,62 @@
             border-radius: 6px;
             margin-top: 0;
         }
+
+        /* Current image styling */
+        .image-container {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .like-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 1rem;
+            height: 0.8rem;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .like-button .heart-icon {
+            color: #ff4757;
+        }
+
+        .like-button .heart-icon:hover {
+            color: #e63946;
+        }
+
+        .heart-icon {
+            font-size: 70%;
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <h1>AKZ Dev's Inky</h1>
         <!-- Display the current image -->
-        <div>
-            <img src="{{ url_for('static', filename=current_image) }}" alt="Current Image" style="width: 300px; height: auto;">
+        <div class="image-container">
+            <form method="POST">
+                <input type="hidden" name="action" value="save_image">
+                <button type="submit" class="like-button" name="liked_image" value="{{ current_image }}">
+                    <i class="fa-solid fa-heart heart-icon"></i>
+                </button>
+            </form>
+            <img src="{{ url_for('static', filename=current_image) }}" alt="Current Image">
         </div>
         <!-- Collapsible Section for Text Input -->
         <div>
@@ -153,7 +200,7 @@
                 <form method="POST">
                     <label for="inputText" style="display: none;">Enter Text:</label>
                     <input type="text" id="inputText" name="inputText" placeholder="Type something..." required>
-                    <button type="submit">Submit</button>
+                    <button class="submit-button" type="submit">Submit</button>
                 </form>
             </div>
         </div>
@@ -166,11 +213,16 @@
                     <div id="fileName" class="file-name" style="display: none;"></div>
                     <label for="imageUpload" class="file-upload-label">Choose Image</label>
                     <input type="file" id="imageUpload" name="imageFile" accept="image/*" required class="file-upload-input" onchange="showFileName()">
-                    <button type="submit">Upload</button>
+                    <button class="submit-button" type="submit">Upload</button>
                 </form>
             </div>
         </div>
 
+        <!-- Form for Generating Random Image -->
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="generate_random_image">
+            <button class="submit-button" type="submit">Generate Random Image</button>
+        </form>
     </div>
     <script>
         // Function to toggle visibility of the collapsible section and add/remove margin
