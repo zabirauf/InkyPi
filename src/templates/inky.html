@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKZ Dev's Inky</title>
+</head>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+<body>
+    <!-- Subtle frame container -->
+    <div class="frame">
+        <!-- Page Title -->
+        <header class="header">
+            <h1>AKZ's Inky</h1>
+        </header>
+
+        <!-- Display the current image -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='current_image.png') }}" alt="Current Image">
+        </div>
+
+        <!-- Separator -->
+        <div class="separator"></div>
+        <h2 class="apps-title">Apps</h2>
+        <div class="button-grid">
+            {% for app in apps %}
+            <a href="{{ url_for('app_page', app_name=app.name) }}" class="icon-button">
+                <img src="{{ url_for('static', filename=app.icon) }}" title="{{ app.name }}" alt="{{ app.name }} icon" class="icon-image">
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+<body>
+</html>

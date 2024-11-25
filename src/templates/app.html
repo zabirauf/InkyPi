@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app.name }} Settings</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+    <script>
+        async function handleAction(action) {
+            // Gather form data
+            const form = document.querySelector('.settings-form');
+            const formData = new FormData(form);
+            formData.append('action', action); // Append the action dynamically (update_now or schedule)
+
+            // Send data to the server
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                // Handle the response
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`Action '${action}' was successful: ${result.message}`);
+                } else {
+                    alert(`Failed to perform action: ${response.statusText}`);
+                }
+                form.reset()
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your request.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="frame">
+        <!-- Back Button -->
+        <button onclick="history.back()" class="back-button">← Back</button>
+
+        <!-- App Title and Icon -->
+        <div class="app-header">
+            <img src="{{ url_for('static', filename=app.icon) }}" alt="{{ app.name }} icon" class="app-icon">
+            <h1 class="app-title">{{ app.name }}</h1>
+        </div>
+        <div class="separator"></div>
+
+        <!-- Include app-specific content -->
+        <form method="POST" action="{{ url_for('update_now') }}" class="settings-form">
+            <!-- Include app-specific content -->
+            <div id="settings-container">
+                {{ settings_content|safe }}
+            </div>
+
+            <!-- Hidden input to pass app name -->
+            <input type="hidden" name="app_name" value="{{ app.name }}">
+        </form>
+ 
+        <!-- Buttons -->
+        <div class="buttons-container">
+            <button type="button" onclick="handleAction('update_now')" class="action-button left">Update Now</button>
+            <button type="button" onclick="handleAction('schedule')" class="action-button right">Schedule</button>
+        </div>
+    </div>
+</body>
+</html>
