@@ -1,0 +1,23 @@
+[
+    {
+        "display_name": "AI Image",
+        "id": "ai_image",
+        "class": "AIImageApp"
+    },
+    {
+        "display_name": "Image Upload",
+        "id": "image_upload",
+        "class": "ImageUploadApp"
+    },
+    {
+        "display_name": "Today's Newspaper",
+        "id": "newspaper",
+        "class": "NewspaperApp",
+        "image_settings": ["keep-width"]
+    },
+    {
+        "display_name": "Clock",
+        "id": "clock",
+        "class": "ClockApp"
+    }
+]

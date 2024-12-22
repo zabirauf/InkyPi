@@ -1,0 +1,24 @@
+<!-- Display file name above the upload button -->
+<div class="form-group">
+    <label for="imageUpload" class="form-input file-upload-label">Choose Image</label>
+    <input type="file" clear-on-submit="true" id="imageUpload" name="imageFile" accept="image/*" required class="file-upload-input" onchange="showFileName()">
+</div>
+<div class="form-group">
+    <div id="fileName" class="file-name" style="display: none;"></div>
+</div>
+
+
+<script>
+    function showFileName() {
+        const fileInput = document.getElementById('imageUpload');
+        const fileNameDisplay = document.getElementById('fileName');
+        const file = fileInput.files[0];
+
+        if (file) {
+            fileNameDisplay.textContent = `Selected file: ${file.name}`;
+            fileNameDisplay.style.display = 'block';  // Show the file name
+        } else {
+            fileNameDisplay.style.display = 'none';  // Hide if no file is selected
+        }
+    }
+</script>

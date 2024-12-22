@@ -1,0 +1,13 @@
+{
+    "name": "AKZ's New Inky!",
+    "resolution": "800x480",
+    "orientation": "horizontal",
+    "scheduler_sleep_time": 60,
+    "refresh_settings": {
+        "interval": 180,
+        "app_settings": {
+            "app_id": "image_upload",
+            "imageFile": "/usr/local/inkypi/src/static/saved_images/Screenshot 2024-11-17 at 9.16.09\u202fAM.png"
+        }
+    }
+}

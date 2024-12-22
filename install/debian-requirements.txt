@@ -1,0 +1,5 @@
+libtiff-dev
+python3
+python3-venv
+python3-pip
+avahi-daemon

@@ -11,7 +11,10 @@
     <div class="frame">
         <!-- Page Title -->
         <header class="header">
-            <h1>AKZ's Inky</h1>
+            <h1>{{ config.name }}</h1>
+            <a href="{{ url_for('settings.settings_page') }}" class="settings-button">
+                <img src="{{ url_for('static', filename='icons/settings.png') }}" title="Settings" alt="settings icon" class="icon-image">
+            </a>
         </header>
 
         <!-- Display the current image -->
@@ -24,8 +27,8 @@
         <h2 class="apps-title">Apps</h2>
         <div class="button-grid">
             {% for app in apps %}
-            <a href="{{ url_for('app_page', app_name=app.name) }}" class="icon-button">
-                <img src="{{ url_for('static', filename=app.icon) }}" title="{{ app.name }}" alt="{{ app.name }} icon" class="icon-image">
+            <a href="{{ url_for('app.app_page', app_id=app.id) }}" class="icon-button">
+                <img src="{{ url_for('app.image', app_id=app.id, filename='icon.png') }}" title="{{ app.display_name }}" alt="{{ app.display_name }} icon" class="icon-image">
             </a>
             {% endfor %}
         </div>

@@ -55,8 +55,11 @@ body {
 }
 
 .image-container img {
-    width: 100%;
+    width: auto;
     border-radius: 6px;
+    max-width: 20rem;
+    max-height: 20rem;
+    height: auto;
 }
 
 /* Separator styling */
@@ -135,8 +138,8 @@ body {
 
 /* App icon styling */
 .app-icon {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 5px;
     object-fit: contain;
 }
@@ -201,6 +204,7 @@ body {
 }
 /* Adjust button styles for the Show Now and Schedule buttons */
 .submit-button {
+    flex: 0.5;
     background-color: #1abc9c;
     color: white;
     border: none;
@@ -333,4 +337,206 @@ body {
 
 .toggle-checkbox:checked + .toggle-label::before {
     transform: translateX(26px);
+}
+
+/* Style the custom file upload button */
+.file-upload-label {
+    display: inline-block;
+    background-color: #f9fafb; /* Matching background color */
+    color: #333; /* Text color matching the input */
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    border: 1px solid #ddd; /* Matching border style */
+}
+
+.file-upload-label:hover {
+    background-color: #e5e7eb; /* Slightly darker hover state */
+}
+
+.file-upload-label:active {
+    background-color: #d1d5db; /* Active state */
+}
+
+/* Hide the default file input */
+.file-upload-input {
+    display: none;
+}
+
+/* File name display styling */
+.file-name {
+    font-size: 1rem;
+    color: #333;
+    word-wrap: break-word;
+    margin-bottom: 1rem; /* Ensures there's space between the filename and upload button */
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.clock-face-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Ensures grid items wrap */
+    gap: 10px;
+    margin-top: 10px; /* Adds spacing between label and grid */
+    width: 100%
+}
+
+.clock-face-option {
+    text-align: center;
+    border: 2px solid transparent;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.clock-face-option img {
+    width: 100%;
+    height: auto; /* Ensures aspect ratio is maintained */
+    max-width: 100px; /* Optional: Limits the max width of images */
+}
+
+.clock-face-option.selected {
+    border-color: #007bff; /* Highlight for selected option */
+}
+
+/* Settings button styling */
+.settings-button {
+    font-size: 1rem;
+    color: #555555;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    float: right; /* Align the button to the right of the header */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.settings-button img {
+    margin-bottom: 0px;
+}
+
+.settings-button:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* On top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 15% auto; /* Center the modal */
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #333;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Success/Failure Modal Styles */
+.success-failure-modal {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    max-width: 400px;
+    border-radius: 8px;
+    background-color: #1abc9c; /* Default color for success */
+    padding: 10px 16px 10px 24px; /* Added left padding for spacing */
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    text-align: center;
+}
+
+.success-failure-modal .response-modal-content {
+    border-radius: 8px;
+    background: inherit;
+    padding-right: 24px; /* Space between text and close button */
+}
+
+.success-failure-modal .close-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.success-failure-modal.success {
+    background-color: #1abc9c; /* Success color */
+}
+
+.success-failure-modal.failure {
+    background-color: #c4515b; /* Failure color */
+}
+
+/* Loading Indicator Styles */
+.loading-indicator {
+    display: none; /* Hidden by default */
+    width: 40px;
+    height: 40px;
+    border: 4px solid transparent;
+    border-top: 4px solid #0c7586; /* Blue color for the spinner */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+
+    margin-left: auto;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
