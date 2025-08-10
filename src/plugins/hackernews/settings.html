@@ -1,0 +1,50 @@
+<div class="plugin-settings">
+    <h3>Hacker News Settings</h3>
+    
+    <div class="form-group">
+        <label for="num_stories">Number of Stories to Display:</label>
+        <select name="num_stories" id="num_stories" class="form-control">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="text_color">Text Color:</label>
+        <input type="color" name="text_color" id="text_color" value="#000000" class="form-control">
+    </div>
+    
+    <div class="form-group">
+        <label for="bg_color">Background Color:</label>
+        <input type="color" name="bg_color" id="bg_color" value="#FFFFFF" class="form-control">
+    </div>
+    
+    <div class="form-group">
+        <label for="show_author">
+            <input type="checkbox" name="show_author" id="show_author" value="true">
+            Show Author Names
+        </label>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof loadPluginSettings !== 'undefined' && loadPluginSettings) {
+                // Load saved settings
+                if (pluginSettings.num_stories) {
+                    document.getElementById('num_stories').value = pluginSettings.num_stories;
+                }
+                if (pluginSettings.text_color) {
+                    document.getElementById('text_color').value = pluginSettings.text_color;
+                }
+                if (pluginSettings.bg_color) {
+                    document.getElementById('bg_color').value = pluginSettings.bg_color;
+                }
+                if (pluginSettings.show_author === 'true') {
+                    document.getElementById('show_author').checked = true;
+                }
+            }
+        });
+    </script>
+</div>
